@@ -2,7 +2,6 @@ import pyautogui
 import cv2
 import numpy as np
 import time
-import pydirectinput
 
 screen_width, screen_height = pyautogui.size()
 # Definir la región de la pantalla a capturar
@@ -12,8 +11,6 @@ region = (
     200,                        # Ancho de la región 222
     150                         # Alto de la región 176
 )
-
-last_press_time = time.time()
 
 while True:
     # Capturar la región de la pantalla
@@ -62,14 +59,7 @@ while True:
             time.sleep(0.06)
             pyautogui.press('e')
             print("Pulsado e")
-            last_press_time = time.time()
             time.sleep(0.1)  # Ajusta según sea necesario
-
-    current_time = time.time()
-    if current_time - last_press_time > 10:
-        pydirectinput.click()
-        print("Clic izquierdo")
-        last_press_time = current_time
 
     # Mostrar imagen (opcional)
     cv2.drawContours(frame, [c_red], -1, (0, 255, 0), 2)
