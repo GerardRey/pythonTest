@@ -2,6 +2,8 @@ import pyautogui
 import cv2
 import numpy as np
 import time
+import pydirectinput
+
 screen_width, screen_height = pyautogui.size()
 # Definir la región de la pantalla a capturar
 region = (
@@ -65,7 +67,7 @@ while True:
 
     current_time = time.time()
     if current_time - last_press_time > 10:
-        pyautogui.leftClick()
+        pydirectinput.click()
         print("Clic izquierdo")
         last_press_time = current_time
 
