@@ -65,7 +65,7 @@ while True:
 
     current_time = time.time()
     if current_time - last_press_time > 10:
-        pyautogui.click()
+        pyautogui.leftClick()
         print("Clic izquierdo")
         last_press_time = current_time
 
