@@ -56,7 +56,7 @@ while True:
             y_red < y_blue + h_blue and
             y_red + h_red > y_blue):
             # Presionar 'e' si hay superposición
-            time.sleep(0.06)
+            time.sleep(0.02)
             pyautogui.press('e')
             print("Pulsado e")
             time.sleep(0.1)  # Ajusta según sea necesario
