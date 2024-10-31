@@ -1,0 +1,34 @@
+name: Build Executable
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build executable with PyInstaller
+        run: |
+          pyinstaller --onefile --windowed testPython.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: fishing_test
+          path: dist/fishing_test.exe
