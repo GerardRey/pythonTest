@@ -3,6 +3,9 @@ import cv2
 import numpy as np
 import time
 
+# Desactivar el fail-safe de PyAutoGUI
+pyautogui.FAILSAFE = False
+
 screen_width, screen_height = pyautogui.size()
 # Definir la región de la pantalla a capturar
 region = (
