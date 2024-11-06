@@ -15,6 +15,10 @@ region = (
     150                         # Alto de la región 176
 )
 
+# Inicializar c_red y c_blue
+c_red = np.array([])
+c_blue = np.array([])
+
 while True:
     # Capturar la región de la pantalla
     screenshot = pyautogui.screenshot(region=region)
@@ -24,20 +28,15 @@ while True:
     # Convertir la imagen al espacio de color HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    # Detectar el color rojo
-    lower_red1 = np.array([0, 70, 50])
-    upper_red1 = np.array([10, 255, 255])
-    mask_red1 = cv2.inRange(hsv, lower_red1, upper_red1)
+    # Detectar el color rojo específico
+    lower_red = np.array([0, 150, 150])
+    upper_red = np.array([5, 255, 255])
+    mask_red = cv2.inRange(hsv, lower_red, upper_red)
 
-    lower_red2 = np.array([170, 70, 50])
-    upper_red2 = np.array([180, 255, 255])
-    mask_red2 = cv2.inRange(hsv, lower_red2, upper_red2)
-
-    mask_red = cv2.bitwise_or(mask_red1, mask_red2)
 
     # Detectar el color azul
-    lower_blue = np.array([100, 150, 0])
-    upper_blue = np.array([140, 255, 255])
+    lower_blue = np.array([100, 150, 150])
+    upper_blue = np.array([130, 255, 255])
     mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
 
     # Encontrar contornos
