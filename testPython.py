@@ -20,8 +20,12 @@ region = (
 
 superposicion_continua = 0
 umbral_superposicion = 1  # Número de ciclos de superposición necesarios
-umbral_iou = 0.04  # Umbral de IoU mínimo ()
+umbral_iou = 0.04  # Umbral de IoU mínimo
 umbral_area = 10  # Umbral de área mínima para considerar un contorno
+umbral_area_minima = 50  # Umbral de área mínima para recalcular el contorno azul
+
+contours_blue_not_exist = True
+contours_blue_original = any
 
 running = False
 
@@ -42,7 +46,7 @@ def calcular_iou(box1, box2):
     return iou
 
 def process_frame():
-    global running, superposicion_continua, DEBUG
+    global running, superposicion_continua, DEBUG, contours_blue_not_exist, contours_blue_original
 
     while True:
         if not running:
@@ -64,12 +68,19 @@ def process_frame():
         mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
 
         contours_red, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        contours_blue, _ = cv2.findContours(mask_blue, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        if contours_blue_not_exist:
+
+            contours_blue, _ = cv2.findContours(mask_blue, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        else:
+            contours_blue = contours_blue_original
 
         c_red = np.array([])
         c_blue = np.array([])
 
         if contours_red and contours_blue:
+            if contours_blue_not_exist:
+                contours_blue_original = contours_blue
+            contours_blue_not_exist = False
             c_red = max(contours_red, key=cv2.contourArea)
             x_red, y_red, w_red, h_red = cv2.boundingRect(c_red)
             area_red = w_red * h_red
@@ -77,6 +88,9 @@ def process_frame():
             c_blue = max(contours_blue, key=cv2.contourArea)
             x_blue, y_blue, w_blue, h_blue = cv2.boundingRect(c_blue)
             area_blue = w_blue * h_blue
+
+            if area_blue < umbral_area_minima:
+                contours_blue_not_exist = True
 
             if area_red > umbral_area and area_blue > umbral_area:
                 iou = calcular_iou((x_red, y_red, w_red, h_red), (x_blue, y_blue, w_blue, h_blue))
@@ -91,6 +105,7 @@ def process_frame():
                     pyautogui.press('e')
                     print("Pulsado e")  # Mensaje de depuración
                     superposicion_continua = 0
+                    contours_blue_not_exist = True
                     time.sleep(0.1)
 
         if DEBUG:
