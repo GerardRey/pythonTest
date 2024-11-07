@@ -2,7 +2,7 @@ import pyautogui
 import cv2
 import numpy as np
 import time
-from threading import Thread
+from threading import Thread, Timer
 from tkinter import Tk, Button, Label
 
 # Desactivar el fail-safe de PyAutoGUI
@@ -44,6 +44,11 @@ def calcular_iou(box1, box2):
 
     iou = inter_area / float(box1_area + box2_area - inter_area)
     return iou
+
+def mouse_click():
+    pyautogui.mouseDown()
+    pyautogui.mouseUp()
+    Timer(0.7, mouse_click).start()  # Reprogramar el temporizador para que se ejecute cada 700 ms
 
 def process_frame():
     global running, superposicion_continua, DEBUG, contours_blue_not_exist, contours_blue_original
@@ -130,6 +135,7 @@ def start_processing():
     global running
     running = True
     status_label.config(text="Status: Play")
+    mouse_click()  # Iniciar el temporizador para los clics del ratón
 
 def stop_processing():
     global running
