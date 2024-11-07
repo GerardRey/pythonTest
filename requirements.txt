@@ -2,4 +2,5 @@ pyautogui
 pillow
 opencv-python
 numpy
+pygetwindow
 pyinstaller
