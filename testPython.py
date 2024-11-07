@@ -52,7 +52,7 @@ def calcular_iou(box1, box2):
 def mouse_click():
     window = gw.getActiveWindow()
     
-    if window.title == window_name:
+    if window.title == window_name and running:
         pyautogui.mouseDown()
         pyautogui.mouseUp()
     Timer(1, mouse_click).start()  # Reprogramar el temporizador para que se ejecute cada 1000 ms
