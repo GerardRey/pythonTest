@@ -1,4 +1,5 @@
 import pyautogui
+import pygetwindow as gw
 import cv2
 import numpy as np
 import time
@@ -29,6 +30,9 @@ contours_blue_original = any
 
 running = False
 
+# Nombre de la ventana a la que se enviarán los eventos de mouse
+window_name = "FiveM® by Cfx.re - Family RP"
+
 def calcular_iou(box1, box2):
     x1, y1, w1, h1 = box1
     x2, y2, w2, h2 = box2
@@ -46,16 +50,23 @@ def calcular_iou(box1, box2):
     return iou
 
 def mouse_click():
-    pyautogui.mouseDown()
-    pyautogui.mouseUp()
-    Timer(0.7, mouse_click).start()  # Reprogramar el temporizador para que se ejecute cada 700 ms
+    window = gw.getActiveWindow()
+    
+    if window.title == window_name:
+        pyautogui.mouseDown()
+        pyautogui.mouseUp()
+    Timer(1, mouse_click).start()  # Reprogramar el temporizador para que se ejecute cada 1000 ms
 
 def process_frame():
     global running, superposicion_continua, DEBUG, contours_blue_not_exist, contours_blue_original
 
     while True:
+        window = gw.getActiveWindow()
         if not running:
             time.sleep(0.1)
+            continue
+        if window.title != window_name:
+            time.sleep(10)
             continue
 
         start_time = time.time()
@@ -74,7 +85,6 @@ def process_frame():
 
         contours_red, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         if contours_blue_not_exist:
-
             contours_blue, _ = cv2.findContours(mask_blue, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         else:
             contours_blue = contours_blue_original
