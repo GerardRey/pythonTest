@@ -23,7 +23,7 @@ superposicion_continua = 0
 umbral_superposicion = 1  # Número de ciclos de superposición necesarios
 umbral_iou = 0.04  # Umbral de IoU mínimo
 umbral_area = 10  # Umbral de área mínima para considerar un contorno
-umbral_area_minima = 50  # Umbral de área mínima para recalcular el contorno azul
+umbral_area_minima = 75  # Umbral de área mínima para recalcular el contorno azul
 
 contours_blue_not_exist = True
 contours_blue_original = any
